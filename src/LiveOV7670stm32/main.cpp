@@ -60,13 +60,13 @@ Adafruit_ST7735_stm32Arduino tft(PA2, PA3, PA1);
 
 void initLiveOV7670() {
   bool cameraInitialized = camera.init();
-  tft.initR(INITR_BLACKTAB);
-  if (cameraInitialized) {
-    tft.fillScreen(ST7735_BLACK);
-  } else {
-    tft.fillScreen(ST7735_RED);
+//  tft.initR(INITR_BLACKTAB);
+//  if (cameraInitialized) {
+//    tft.fillScreen(ST7735_BLACK);
+//  } else {
+//    tft.fillScreen(ST7735_RED);
     delay(3000);
-  }  
+//  }  
 
   //pinMode(PC13, OUTPUT);
   //pinMode(PC14, OUTPUT);
@@ -106,30 +106,32 @@ void processFrame() {
 
   for (uint16_t i = 0; i < camera.getLineCount(); i++) {
     camera.readLine();
-    sendLineToDisplay();
+//    sendLineToDisplay();
   }
 }
 
 
 
 void sendLineToDisplay() {
-  if (screenLineIndex > 0) {
-    screenLineStart();
-
-
-#if GRAYSCALE_PIXELS == 1
-    for (uint16_t i=0; i<camera.getPixelBufferLength(); i+=2) {
-      sendPixelByte(graysScaleTableHigh[camera.getPixelByte(i)]);
-      sendPixelByte(graysScaleTableLow[camera.getPixelByte(i)]);
-    }
-#else
-    for (uint16_t i=0; i<camera.getPixelBufferLength(); i++) {
-      sendPixelByte(camera.getPixelByte(i));
-    }
-#endif
-
-    screenLineEnd();
-  }
+//  if (screenLineIndex > 0) {
+//    screenLineStart();
+//
+//
+//#if GRAYSCALE_PIXELS == 1
+//    for (uint16_t i=0; i<camera.getPixelBufferLength(); i+=2) {
+//      sendPixelByte(graysScaleTableHigh[camera.getPixelByte(i)]);
+//      sendPixelByte(graysScaleTableLow[camera.getPixelByte(i)]);
+//    }
+//#else
+//    for (uint16_t i=0; i<camera.getPixelBufferLength(); i++) {
+//      sendPixelByte(camera.getPixelByte(i));
+//    }
+//#endif
+//
+//    screenLineEnd();
+//  }
+  
+  Serial.write(camera.getPixelBuffer(),camera.getPixelBufferLength());
 }
 
 
@@ -187,8 +189,3 @@ void pixelSendingDelay() {
   asm volatile("nop");
 
 }
-
-
-
-
-
